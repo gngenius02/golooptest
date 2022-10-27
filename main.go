@@ -8,14 +8,15 @@ import (
 type HASHSTRUCT struct {
 	s string
 	// buf Buffer
-	b []byte
-	d [32]byte
+	bs []byte
+	b  []byte
+	d  [32]byte
 }
 
 const hextable = "0123456789abcdef"
 
 func (HS *HASHSTRUCT) EncodeToHexBytes() {
-	HS.b = make([]byte, 64)
+	// HS.b = make([]byte, 64)
 	j := 0
 	for _, v := range HS.d {
 		HS.b[j] = hextable[v>>4]
@@ -25,11 +26,17 @@ func (HS *HASHSTRUCT) EncodeToHexBytes() {
 }
 
 func (HS *HASHSTRUCT) HashFn() {
-	HS.d = sha256.Sum256(HS.b)
+	if HS.bs != nil {
+		HS.d = sha256.Sum256(HS.bs)
+		HS.bs = nil
+	} else {
+		HS.d = sha256.Sum256(HS.b)
+	}
 }
 
 func (HS *HASHSTRUCT) HashLoop(loops int) {
-	HS.b = []byte(HS.s)
+	HS.bs = []byte(HS.s)
+	HS.b = make([]byte, 64)
 	for i := 0; i < loops; i++ {
 		HS.HashFn()
 		HS.EncodeToHexBytes()
@@ -42,6 +49,5 @@ func main() {
 
 	HS := &HASHSTRUCT{s: "abc"}
 	HS.HashLoop(loops)
-
-	fmt.Printf("%x", HS.b)
+	fmt.Printf("%s", HS.b)
 }

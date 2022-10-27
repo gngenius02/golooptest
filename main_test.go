@@ -24,9 +24,9 @@ func BenchmarkGetHashUsingLoop10Million(b *testing.B) {
 	HS := &HASHSTRUCT{s: "abc"}
 
 	for i := 0; i < b.N; i++ {
-		HS.HashLoop(10_000_000)
+		HS.HashLoop(100_000_000)
 		result := string(HS.b)
-		if result != "bf34d93b4be2a313b06cdf9d805c5f3d140abd872c37199701fb1e43fe479923" {
+		if result != "f44d6c7c3bf0a0a5cffee6bf410b27a2d8502233bb6397d3ebe5ebdd5c833da2" {
 			b.Error("Unexpected result: " + result)
 		}
 	}
