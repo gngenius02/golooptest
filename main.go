@@ -3,11 +3,14 @@ package main
 import (
 	"crypto/sha256"
 	"fmt"
+	"os"
+	"strconv"
+	"time"
 )
 
 type HASHSTRUCT struct {
 	s string
-	// buf Buffer
+	// buf bytes.Buffer
 	bs []byte
 	b  []byte
 	d  [32]byte
@@ -16,7 +19,6 @@ type HASHSTRUCT struct {
 const hextable = "0123456789abcdef"
 
 func (HS *HASHSTRUCT) EncodeToHexBytes() {
-	// HS.b = make([]byte, 64)
 	j := 0
 	for _, v := range HS.d {
 		HS.b[j] = hextable[v>>4]
@@ -45,9 +47,30 @@ func (HS *HASHSTRUCT) HashLoop(loops int) {
 
 func main() {
 
-	loops := 2
+	argv := os.Args
+	argc := len(argv)
+	command := argv[0]
+	if argc < 2 {
+		fmt.Printf("Usage:\n\t command <string> [number of loops Default = 100Million]\nExample:\n\t%s abc\n\n\t%s abc 100\n", command, command)
+		os.Exit(1)
+	}
+	start := time.Now()
 
-	HS := &HASHSTRUCT{s: "abc"}
+	input := argv[1]
+	loops := 100_000_000
+	if argc > 2 {
+		num, err := strconv.Atoi(argv[2])
+		if err != nil {
+			fmt.Printf("Received 2nd arg but couldnt convert it to int!")
+			os.Exit(1)
+		}
+		loops = num
+	}
+
+	HS := &HASHSTRUCT{s: input}
 	HS.HashLoop(loops)
-	fmt.Printf("%s", HS.b)
+
+	elapsed := time.Since(start)
+	fmt.Printf("%s,%s\n\ncompleted in: %s\n", input, HS.b, elapsed)
+
 }
