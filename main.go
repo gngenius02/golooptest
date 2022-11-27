@@ -1,11 +1,12 @@
 package main
 
 import (
-	"crypto/sha256"
 	"fmt"
 	"os"
 	"strconv"
 	"time"
+
+	"github.com/minio/sha256-simd"
 )
 
 type HASHSTRUCT struct {
