@@ -1,6 +1,7 @@
 package main
 
 import (
+	// "crypto/sha256"
 	"fmt"
 	"os"
 	"strconv"
@@ -38,8 +39,6 @@ func (HS *HASHSTRUCT) HashFn() {
 }
 
 func (HS *HASHSTRUCT) HashLoop(loops int) {
-	HS.bs = []byte(HS.s)
-	HS.b = make([]byte, 64)
 	for i := 0; i < loops; i++ {
 		HS.HashFn()
 		HS.EncodeToHexBytes()
@@ -47,7 +46,6 @@ func (HS *HASHSTRUCT) HashLoop(loops int) {
 }
 
 func main() {
-
 	argv := os.Args
 	argc := len(argv)
 	command := argv[0]
@@ -69,6 +67,8 @@ func main() {
 	}
 
 	HS := &HASHSTRUCT{s: input}
+	HS.bs = []byte(HS.s)
+	HS.b = make([]byte, 64)
 	HS.HashLoop(loops)
 
 	elapsed := time.Since(start)
