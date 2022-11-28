@@ -62,7 +62,5 @@ func main() {
 		h.HashFn()
 	}
 
-	elapsed := time.Since(start)
-	fmt.Printf("%s,%s\n\ncompleted in: %s\n", input, h.b, elapsed)
-
+	fmt.Printf("%s,%s\n\ncompleted in: %s\n", input, h.b, time.Since(start))
 }
