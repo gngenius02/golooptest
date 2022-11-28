@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"testing"
 )
 
@@ -35,17 +34,11 @@ import (
 
 func BenchmarkGetHashUsingLoop10Million(b *testing.B) {
 	b.ReportAllocs()
-
-	HS := &HASHSTRUCT{s: "abc"}
-
-	HS.bs = []byte(HS.s)
-	HS.b = make([]byte, 64)
-
+	h := &Hasher{bs: []byte("abc"), b: make([]byte, 64)}
 	for i := 0; i < b.N; i++ {
-		HS.HashFn()
-		HS.EncodeToHexBytes()
+		h.HashFn()
+		h.EncodeToHexBytes()
 	}
-	fmt.Printf("%d - %s\n", b.N, HS.b)
 }
 
 // func BenchmarkGetHashUsingLoop10Million(b *testing.B) {
