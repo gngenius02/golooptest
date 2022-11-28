@@ -1,8 +1,6 @@
 package main
 
-import (
-	"testing"
-)
+import "testing"
 
 func BenchmarkGetHashUsingLoop10Million(b *testing.B) {
 	b.ReportAllocs()
