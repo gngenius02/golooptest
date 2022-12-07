@@ -47,12 +47,12 @@ func (d *digest) Write(p []byte) (nn int, err error) {
 		}
 		p = p[n:]
 	}
-	if len(p) >= chunk {
-		n := len(p) &^ (chunk - 1)
+	if nn >= chunk {
+		n := nn &^ (chunk - 1)
 		block(d, p[:n])
 		p = p[n:]
 	}
-	if len(p) > 0 {
+	if nn > 0 {
 		d.nx = copy(d.x[:], p)
 	}
 	return
