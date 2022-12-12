@@ -11,6 +11,7 @@ import (
 )
 
 type Hasher struct {
+	// h  hash.Hash
 	bs []byte
 	b  []byte
 	d  [32]byte
@@ -44,7 +45,6 @@ func main() {
 		os.Exit(1)
 	}
 	start := time.Now()
-
 	input := argv[1]
 	loops := 100_000_000
 	if argc > 2 {
@@ -56,12 +56,9 @@ func main() {
 		}
 		loops = num
 	}
-
 	h := &Hasher{bs: []byte(input), b: make([]byte, 64)}
-
 	for i := 0; i < loops; i++ {
 		h.HashFn()
 	}
-
 	fmt.Printf("%s,%s\n\ncompleted in: %s\n", input, h.b, time.Since(start))
 }

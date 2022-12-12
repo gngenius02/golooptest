@@ -70,7 +70,7 @@ DATA SHUF_MASK<>+0x00(SB)/8, $0x0405060700010203
 DATA SHUF_MASK<>+0x08(SB)/8, $0x0c0d0e0f08090a0b
 GLOBL SHUF_MASK<>(SB), RODATA|NOPTR, $16
 
-TEXT ·blockSha(SB), NOSPLIT, $0-32
+TEXT ·blockSha(SB), $0-32
 	MOVQ      h+0(FP), DX
 	MOVQ      message_base+8(FP), SI
 	MOVQ      message_len+16(FP), DI

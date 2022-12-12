@@ -14,6 +14,14 @@ type digest struct {
 	len uint64
 }
 
+func Sum256(data []byte) (result [Size]byte) {
+	var d digest
+	d.Reset()
+	d.Write(data)
+	result = d.checkSum()
+	return
+}
+
 func (d *digest) Reset() {
 	d.h[0] = 0x6A09E667
 	d.h[1] = 0xBB67AE85
@@ -25,14 +33,6 @@ func (d *digest) Reset() {
 	d.h[7] = 0x5BE0CD19
 	d.nx = 0
 	d.len = 0
-}
-
-func Sum256(data []byte) (result [Size]byte) {
-	var d digest
-	d.Reset()
-	d.Write(data)
-	result = d.checkSum()
-	return
 }
 
 func (d *digest) Write(p []byte) (nn int, err error) {
@@ -64,12 +64,9 @@ func block(dig *digest, p []byte) {
 
 func (d *digest) checkSum() (digest [Size]byte) {
 	n := d.nx
-
 	var k [64]byte
 	copy(k[:], d.x[:n])
-
 	k[n] = 0x80
-
 	if n >= 56 {
 		block(d, k[:])
 		k[0] = 0
@@ -139,7 +136,6 @@ func (d *digest) checkSum() (digest [Size]byte) {
 	}
 	binary.BigEndian.PutUint64(k[56:64], uint64(d.len)<<3)
 	block(d, k[:])
-
 	binary.BigEndian.PutUint32(digest[0:4], d.h[0])
 	binary.BigEndian.PutUint32(digest[4:8], d.h[1])
 	binary.BigEndian.PutUint32(digest[8:12], d.h[2])
@@ -148,7 +144,6 @@ func (d *digest) checkSum() (digest [Size]byte) {
 	binary.BigEndian.PutUint32(digest[20:24], d.h[5])
 	binary.BigEndian.PutUint32(digest[24:28], d.h[6])
 	binary.BigEndian.PutUint32(digest[28:32], d.h[7])
-
 	return
 }
 
