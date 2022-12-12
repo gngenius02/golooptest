@@ -3,7 +3,6 @@ package sha256
 import "encoding/binary"
 
 const (
-	Size  = 32
 	chunk = 64
 )
 
@@ -14,7 +13,7 @@ type digest struct {
 	len uint64
 }
 
-func Sum256(data []byte) (result [Size]byte) {
+func Sum256(data []byte) (result [32]byte) {
 	var d digest
 	d.Reset()
 	d.Write(data)
@@ -62,7 +61,7 @@ func block(dig *digest, p []byte) {
 	blockSha(&dig.h, p)
 }
 
-func (d *digest) checkSum() (digest [Size]byte) {
+func (d *digest) checkSum() (digest [32]byte) {
 	n := d.nx
 	var k [64]byte
 	copy(k[:], d.x[:n])
